@@ -1,0 +1,7 @@
+
+services:
+    pdbf:
+      build: .
+      command: sleep infinity
+      volumes:
+        - "./:/code/"

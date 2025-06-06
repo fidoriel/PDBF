@@ -144,3 +144,14 @@ GIT.gz
 !examples/attachment/pdf_reference.pdf
 !src/pdbf/tests/attachment/pdf_reference.pdf
 *~
+
+
+# latex
+output/*
+*.fls
+*.fdb_latexmk
+*.bbl
+*.bcf
+*.blg
+*.xml
+*.sty

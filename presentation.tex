@@ -1,0 +1,152 @@
+% latexmk -pdf -shell-escape introduction.tex
+% LTeX: language=en-US
+
+\documentclass[aspectratio=169]{beamer}
+\usepackage{diagbox}
+\usepackage{hyperref}
+\usepackage{pdbf}
+\usetheme[background=dark, progressbar=frametitle, titleformat=smallcaps]{metropolis}
+\usepackage{csquotes}
+
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+\title{Tools for Reproduction of Results in Computer Science}
+\subtitle{Scientific Practice}
+\date{16.06.2025}
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{author in head/foot}%
+    \hspace{1em}\insertshorttitle{} -- \insertshortsubtitle{}%
+    \hfill%
+    \makebox[3em][r]{\insertframenumber\hspace{1em}}%
+  \end{beamercolorbox}%
+}
+
+\AtBeginSection[]{}
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\frame{\titlepage}
+}
+
+\begin{frame}{Reproduction}
+    If I have the same code, the same datasets and hardware I can reproduce the results described in a paper.
+\end{frame}
+
+\begin{frame}{Archival Work}
+    \begin{itemize}
+        \item We talked about acid free paper
+        \item But what is the \textquote{acid free paper of the digital world?}
+        \item \texttt{PDF/A} as a long archival pdf format
+        \item Virtual Machines as a time capsule
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lets Reproduce}
+    There is this paper (\citeauthor{pdbf}, \citetitle{pdbf}) which aims to build a all in one pdf inlcuding databases and virtual machines
+\end{frame}
+
+
+\begin{frame}[fragile]{Reprocucing the Environment}
+    \small
+    \begin{verbatim}
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]                  
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]              
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]    
+Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8793 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [512 B]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [265 kB]
+Fetched 9313 kB in 1s (9198 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Package phantomjs is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or
+is only available from another source
+E: Package 'phantomjs' has no installation candidate
+    \end{verbatim}
+\end{frame}
+
+\begin{frame}{Where are the problems?}
+    \begin{itemize}
+        \item Package server may go down
+        \item Used releases may be yanked for security reasons and not longer available
+        \item Packages may be updated by repository mainainers e.g. apt
+        \item Packages may not be available for a newer system architecture
+        \item Virtualizing a System may become more difficult
+        \item Files cannot be read because of propierary file formats
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What does this mean?}
+    \begin{itemize}
+        \item Not only the code and datasets BUT all of their dependencies, compiler versions ...
+        \item E.g. compiler optimization bugs in polynomial operations caused wrong results
+        \item Have a future reader understand the complete setup
+        \item System configs may require deep setup understanding and are hard to reproduce even by the authors
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{How did it work finally?}
+    \begin{itemize}
+        \item Old Debian in Docker Container
+        \item All dependencies via apt available
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{How to archive digital work?}
+    \begin{itemize}
+        \item Pin all versions using commit-shas or lock-files from tools like cargo, uv, npm, maven, nix ...
+        \item Package a Docker Image / Docker Compose setup or Virtual Machine Disk Image
+        \item If not possible have exact setup description (maybe special hardware is required, FPGAs etc.)
+        \item Use tools like \citetitle{reprozip} to help identify and package relevant components through syscall tracing
+        \item Where to archive the digital artifacts?
+        \item Programs like GitHub Arctic Code Vault help preserve code, but not artifacts
+    \end{itemize}
+\end{frame}
+
+
+\dbSQLText{CREATE TABLE test(a int, b int); INSERT INTO test VALUES(1, 10); INSERT INTO test VALUES(2, 100); INSERT INTO test VALUES(3, 120); INSERT INTO test VALUES(4, 100);}
+
+\begin{frame}{Just some notable features of PDBF}
+    They can package interactive graphics and databases. Just change the file ending between \texttt{html} and \texttt{pdf}
+\begin{figure}[h!]
+\hspace{-218pt}Examples:\\
+    \caption{Bar Chart}
+    \end{minipage} \\[8pt]
+    \begin{minipage}{1.0\textwidth}
+    \chart[width=\textwidth, height=0.36\textwidth, chartType=compareToBest]{SELECT b FROM test;}
+    \caption{compareToBest Chart}
+    \end{minipage}
+\end{figure} 
+\end{frame}
+
+\begin{frame}{Reproducability of this presentation}
+    \begin{itemize}
+    \item You will receive a PDBF file of this presentation
+    \item PDBF could bundle a \texttt{tar} file, but the OCI Image is around 5GiB
+    \item There is a repository, a Dockerfile and a Docker Image 
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Discussion}
+    \begin{itemize}
+    \item Should reproducebility be a reqirement in peer reviewed magazines?
+    \item Is it reasonable to ask scientists to spend time on reproducebility, to their work can be archived better and may have a stronger stand?
+    \item How to handle research that cannot be published this way, for example Interlectual Property rights prohibit publishing of a dataset?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+
+\frametitle{References}
+\printbibliography
+
+\end{frame}
+\end{document}

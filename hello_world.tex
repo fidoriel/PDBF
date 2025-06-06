@@ -4,14 +4,14 @@
 
 % Option 1:
 % use q SQL dump inserting data into a mockup database
-\dbSQLText{
-CREATE TABLE HelloWorld(id int, text varchar); INSERT INTO HelloWorld VALUES(10, 'Hello World!'); INSERT INTO HelloWorld VALUES(120, 'Hallo Welt!');  INSERT INTO HelloWorld VALUES(100, 'bonjour le monde!');  INSERT INTO HelloWorld VALUES(42, 'Hello World!');}
+% \dbSQLText{
+% CREATE TABLE HelloWorld(id int, text varchar); INSERT INTO HelloWorld VALUES(10, 'Hello World!'); INSERT INTO HelloWorld VALUES(120, 'Hallo Welt!');  INSERT INTO HelloWorld VALUES(100, 'bonjour le monde!');  INSERT INTO HelloWorld VALUES(42, 'Hello World!');}
 
 % Option 2:
 % use a jdbc connecction to an existing database
 % note: this connection is opnly required when creating the document; all data will be embedded into the document when compiling the document; afterwards the jdbc connection is not required anymore
 
-%\dbSQLFile{somedb.sql}
+\dbSQLFile{somedb.sql}
 %\dbSQLJDBC{jdbc:postgresql://localhost:5432/postgres}{postgres}{test}{testtable}%
 
 \begin{document}
