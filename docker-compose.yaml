@@ -1,6 +1,7 @@
 
 services:
     pdbf:
+      image: ghcr.io/fidoriel/pdbf:edge
       build: .
       command: sleep infinity
       volumes:

@@ -15,7 +15,7 @@
 \dbSQLText{CREATE TABLE test(a int, b int, [attribute with space] int); INSERT INTO test VALUES(1, 1, 1); INSERT INTO test VALUES(2, 2, 4); INSERT INTO test VALUES(3, 3, 8); INSERT INTO test VALUES(4, 4, 16);}
 
 
-\title{Reproducing a Paper about a reproducebility Tool}
+\title{Reproducing a Paper about a reproducibility Tool}
 \subtitle{Scientific Practice}
 \date{16.06.2025}
 
@@ -38,24 +38,32 @@
 }
 
 \begin{frame}{Reproduction}
-    If I have the same code, the same datasets and hardware I can reproduce the results described in a paper.
+    If I have the same code, the same environment, the same datasets and hardware I can reproduce the results described in a paper\footnote{Please do not ask me about Machine Learning. GPUs sometimes do non-deterministic stuff.}.
 \end{frame}
 
-\begin{frame}{Archival Work}
-    \begin{itemize}
-        \item We talked about acid free paper
-        \item But what is the \textquote{acid free paper of the digital world?}
-        \item \texttt{PDF/A} as a long archival pdf format
-        \item Virtual Machines as a time capsule
-    \end{itemize}
-\end{frame}
+% \begin{frame}{Archival Work}
+%     \begin{itemize}
+%         \item We talked about acid free paper
+%         \item But what is the \textquote{acid free paper of the digital world?}
+%         \item \texttt{PDF/A} as a long archival pdf format
+%         \item Virtual Machines as a time capsule
+%     \end{itemize}
+% \end{frame}
 
 \begin{frame}{Lets Reproduce}
-    There is this paper (\citeauthor{pdbf}, \citetitle{pdbf}) which aims to build a all in one pdf inlcuding databases and virtual machines
+    \citetitle{pdbf} aims to be able to build an all-in-one PDF to reproduce research.
+    \begin{itemize}
+        \item Actual Paper (\LaTeX)
+        \item Used datasets (json, sql command, csv)
+        \item Interactive Diagrams
+        \item Attach Virtual Machines, tarballs
+        \item ...
+    \end{itemize}
+    Ironically they did not append their setup as a Virtual Machine Disk Image within their paper.
 \end{frame}
 
 
-\begin{frame}[fragile]{Reprocucing the Environment}
+\begin{frame}[fragile]{Reproducing the Environment to Compile PDBF}
     \small
     \begin{verbatim}
 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]                  
@@ -76,54 +84,60 @@ E: Package 'phantomjs' has no installation candidate
     \end{verbatim}
 \end{frame}
 
-\begin{frame}{Where are the problems?}
+
+\begin{frame}{Let's get \texttt{phantomjs}}
+    \begin{itemize}
+        \item Tried old Debian, where package server still existed $\rightarrow$ version too new
+        \item Building from source failed via \texttt{aur} and direct for newer and older versions
+        \item Found a precompiled binary on GitHub for a compatible version
+        \item Then PDBF codebase had a bug $\rightarrow$ added a missing maven dependency $\rightarrow$ workaround $\rightarrow$ this presentation
+    \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{Dependency problems}
     \begin{itemize}
         \item Package server may go down
-        \item Used releases may be yanked for security reasons and not longer available
-        \item Packages may be updated by repository mainainers e.g. apt
-        \item Packages may not be available for a newer system architecture
+        \item Used releases may be yanked for security reasons and no longer available
+        \item Packages may be updated by repository maintainers e.g. apt
+        \item Packages may not be available for a newer system architecture (e.g. x86\_64 or arm64v8)
         \item Virtualizing a System may become more difficult
-        \item Files cannot be read because of propierary file formats
+        \item Files cannot be read because of proprietary file formats
     \end{itemize}
 \end{frame}
 
-\begin{frame}{What does this mean?}
+
+\begin{frame}{How to archive digital work}[allowframebreaks]
     \begin{itemize}
-        \item Not only the code and datasets BUT all of their dependencies, compiler versions ...
+        \item Pin all dependency versions using commit-shas or lock-files from tools like cargo, uv, npm, maven, nix ...
+        \item Package not only the code and datasets BUT all of their (compiled) dependencies, compiler versions, drivers, operating systems, kernels ...
         \item E.g. compiler optimization bugs in polynomial operations caused wrong results
-        \item Have a future reader understand the complete setup
+        \item Non-Hardware reliant projects may be much easier to package
+        \item Rely on Open Source Industry Standard tools, so that Commercial interest funds these project
+        \item Package an OCI Image / Docker Compose setup or Virtual Machine Disk Image
+        \item If not possible have exact setup description (maybe special hardware is required e.g. FPGAs) and package as much as possible
         \item System configs may require deep setup understanding and are hard to reproduce even by the authors
+        \item Tools like \citetitle{reprozip} can assist identify and package relevant components through syscall tracing
+        \item Store artifact in a reliable archive like \url{https://zenodo.org/} or Code with GitHub Arctic Code Vault
+        \item Test the reproducible setup yourself and hand it other people
+        \item Do not rely on any external servers
+        \item Try to minimize non-packable dependencies like Hypervisors or Container runtimes
     \end{itemize}
 \end{frame}
-
-\begin{frame}{How did it work finally?}
-    \begin{itemize}
-        \item Old Debian in Docker Container
-        \item All dependencies via apt available
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{How to archive digital work?}
-    \begin{itemize}
-        \item Pin all versions using commit-shas or lock-files from tools like cargo, uv, npm, maven, nix ...
-        \item Package a Docker Image / Docker Compose setup or Virtual Machine Disk Image
-        \item If not possible have exact setup description (maybe special hardware is required, FPGAs etc.)
-        \item Use tools like \citetitle{reprozip} to help identify and package relevant components through syscall tracing
-        \item Where to archive the digital artifacts?
-        \item Programs like GitHub Arctic Code Vault help preserve code, but not artifacts
-    \end{itemize}
-\end{frame}
-
 
 
 \begin{frame}{Just some notable features of PDBF}
     They can package interactive graphics and databases. Just change the file ending between \texttt{html} and \texttt{pdf}
+
+    When viewing as \texttt{html} click on the Table to play around with sql.
 
     \dataTable[color=white]{SELECT * FROM HelloWorld;}
 \end{frame}
 
 
 \begin{frame}{Just some notable features of PDBF}
+    I had to apply a workaround to make it build. Sadly the pdf version has slightly broken charts.
     \sql{SELECT * FROM test;}\\[3pt]
     The table \texttt{test} contains \dataText{SELECT COUNT(*) FROM test;} tuples.\\[3pt]
 
@@ -132,20 +146,24 @@ E: Package 'phantomjs' has no installation candidate
     \chart[width=0.45\textwidth, height=0.3\textwidth, chartType=bar]{SELECT a, b, [attribute with space] FROM test;}\\[1pt]
 \end{frame}
 
-\begin{frame}{Reproducability of this presentation}
+
+\begin{frame}{Reproducibility of this presentation}
     \begin{itemize}
     \item You will receive a PDBF file of this presentation
-    \item PDBF could bundle a \texttt{tar} file, but the OCI Image is around 5GiB
-    \item There is a repository, a Dockerfile and a Docker Image 
+    \item PDBF could bundle a \texttt{tar} file, but the OCI Image is around 5~GiB and I cannot send this via Slack
+    \item There is a repository, a Dockerfile and a Docker Image \url{https://github.com/fidoriel/pdbf}
+    \item You should be able to use the \texttt{README.md} and \texttt{Docker} to build PDBF and this presentation
     \end{itemize}
 \end{frame}
 
 
 \begin{frame}{Discussion}
+    Reproduction is time-consuming for all participants
     \begin{itemize}
-    \item Should reproducebility be a reqirement in peer reviewed magazines?
-    \item Is it reasonable to ask scientists to spend time on reproducebility, to their work can be archived better and may have a stronger stand?
-    \item How to handle research that cannot be published this way, for example Interlectual Property rights prohibit publishing of a dataset?
+    \item Should reproducibility be a requirement in peer reviewed magazines?
+    \item Can we ask reviewers to spend extra time on reproducing results?
+    \item Is it reasonable to ask scientists to spend time on reproducibility, so their work can be archived better and may have a stronger stand?
+    \item How to handle research that cannot be published this way, for example Intellectual Property or Privacy rights prohibit publishing of a dataset?
     \end{itemize}
 \end{frame}
 
