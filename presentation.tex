@@ -111,19 +111,12 @@ E: Package 'phantomjs' has no installation candidate
 \end{frame}
 
 
-\dbSQLText{CREATE TABLE test(a int, b int); INSERT INTO test VALUES(1, 10); INSERT INTO test VALUES(2, 100); INSERT INTO test VALUES(3, 120); INSERT INTO test VALUES(4, 100);}
+\dbSQLText{CREATE TABLE HelloWorld(id int, text varchar); INSERT INTO HelloWorld VALUES(10, 'Hello World!'); INSERT INTO HelloWorld VALUES(120, 'Hallo Welt!');  INSERT INTO HelloWorld VALUES(100, 'bonjour le monde!');  INSERT INTO HelloWorld VALUES(42, 'Hello World!');}
 
 \begin{frame}{Just some notable features of PDBF}
     They can package interactive graphics and databases. Just change the file ending between \texttt{html} and \texttt{pdf}
-\begin{figure}[h!]
-\hspace{-218pt}Examples:\\
-    \caption{Bar Chart}
-    \end{minipage} \\[8pt]
-    \begin{minipage}{1.0\textwidth}
-    \chart[width=\textwidth, height=0.36\textwidth, chartType=compareToBest]{SELECT b FROM test;}
-    \caption{compareToBest Chart}
-    \end{minipage}
-\end{figure} 
+
+    \dataTable[color=white]{SELECT * FROM HelloWorld;}
 \end{frame}
 
 \begin{frame}{Reproducability of this presentation}

@@ -34,7 +34,7 @@ public class CreateReferencePictures {
 	    for (Process p : Tools.processes) {
 		p.waitFor();
 		if (p.exitValue() != 0) {
-		    throw new IllegalStateException("Phantomjs exited with error!");
+		    throw new IllegalStateException("Phantomjs exited with error image generation!");
 		}
 	    }
 

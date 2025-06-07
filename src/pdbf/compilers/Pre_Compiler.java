@@ -210,7 +210,8 @@ public class Pre_Compiler {
         // Check if phantomjs runs without problems. This can for example detect
         // that a 32bit OS is used but a 64bit binary is present
         try {
-            ProcessBuilder pb = new ProcessBuilder(baseDir + "external-tools" + File.separator + "phantomjs-" + suffix, "--version");
+            ProcessBuilder pb = new ProcessBuilder("phantomjs", "--version");
+            pb.inheritIO();
             Process p = pb.start();
             p.waitFor();
             if (p.exitValue() != 0) {
@@ -329,7 +330,7 @@ public class Pre_Compiler {
                     try {
                         p.waitFor();
                         if (p.exitValue() != 0) {
-                            System.err.println("Phantomjs exited with error!");
+                            System.err.println("Phantomjs exited with error waiting1!");
                             for (Process p2 : processes) {
                                 p2.destroy();
                             }
@@ -348,7 +349,7 @@ public class Pre_Compiler {
             try {
                 p.waitFor();
                 if (p.exitValue() != 0) {
-                    System.err.println("Phantomjs exited with error!");
+                    System.err.println("Phantomjs exited with error waiting2!");
                     for (Process p2 : processes) {
                         p2.destroy();
                     }
@@ -1101,7 +1102,7 @@ public class Pre_Compiler {
                 e.printStackTrace();
             }
             try {
-                ProcessBuilder pb = new ProcessBuilder(baseDir + "external-tools" + File.separator + "phantomjs-" + suffix, baseDir + "external-tools"
+                ProcessBuilder pb = new ProcessBuilder("phantomjs", "--debug=true", baseDir + "external-tools"
                         + File.separator + "capture.js", o.name + ".html", baseDirData, "" + dpiScalingFactor);
                 pb.inheritIO();
                 Process p = pb.start();
@@ -1136,7 +1137,7 @@ public class Pre_Compiler {
             e.printStackTrace();
         }
         try {
-            ProcessBuilder pb = new ProcessBuilder(baseDir + "external-tools" + File.separator + "phantomjs-" + suffix, baseDir + "external-tools"
+            ProcessBuilder pb = new ProcessBuilder("phantomjs", "--debug=true", baseDir + "external-tools"
                     + File.separator + "captureData.js", o.name + ".html", baseDirData);
             pb.inheritIO();
             Process p = pb.start();
@@ -1162,13 +1163,13 @@ public class Pre_Compiler {
             e.printStackTrace();
         }
         try {
-            ProcessBuilder pb = new ProcessBuilder(baseDir + "external-tools" + File.separator + "phantomjs-" + suffix, baseDir + "external-tools"
+            ProcessBuilder pb = new ProcessBuilder("phantomjs", baseDir + "external-tools"
                     + File.separator + "captureDatabase.js", "pdbfDatabase.html", baseDirData);
             pb.inheritIO();
             Process p = pb.start();
             p.waitFor();
             if (p.exitValue() != 0) {
-                System.err.println("Phantomjs exited with error!");
+                System.err.println("Phantomjs exited with error final db!");
                 System.exit(1);
             }
         } catch (Exception e) {

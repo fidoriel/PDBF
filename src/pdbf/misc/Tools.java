@@ -140,7 +140,6 @@ public class Tools {
      * Run a javascript file with phantomjs
      */
     public static void runJsFile(String jsName, String htmlDir, String htmlName, String workingDir) throws IOException, InterruptedException {
-	String phantomjs = baseDir + "external-tools" + File.separator + "phantomjs-" + suffix;
 	String script = testDir + jsName;
 	boolean delete = true;
 
@@ -150,7 +149,7 @@ public class Tools {
 	} catch (Exception e) {
 	    delete = false;
 	}
-	ProcessBuilder pb = new ProcessBuilder(phantomjs, script, htmlName, workingDir);
+	ProcessBuilder pb = new ProcessBuilder("phantomjs", script, htmlName, workingDir);
 	pb.directory(new File(workingDir));
 	pb.inheritIO();
 	Process p = pb.start();

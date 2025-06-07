@@ -89,7 +89,7 @@ public class MinifyResources {
 
 	// Compress javascript files
 	try {
-	    ProcessBuilder pb = new ProcessBuilder(baseDir + "external-tools" + File.separator + "phantomjs-" + suffix, baseDir + "external-tools"
+	    ProcessBuilder pb = new ProcessBuilder("phantomjs", baseDir + "external-tools"
 		    + File.separator + "compress.js");
 	    pb.inheritIO();
 	    pb.directory(new File(baseDirData));

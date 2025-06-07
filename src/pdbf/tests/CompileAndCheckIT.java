@@ -127,7 +127,7 @@ public class CompileAndCheckIT {
 		for (Process p2 : Tools.processes) {
 		    p2.destroy();
 		}
-		fail("Phantomjs exited with error!");
+		fail("Phantomjs exited with error compile and check!");
 	    }
 	}
 	for (File f : Tools.deleteList) {
