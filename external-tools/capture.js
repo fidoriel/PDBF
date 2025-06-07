@@ -50,9 +50,9 @@ page.onError = function (msg, trace) {
 	phantom.exit();
 };
 
-/*page.onConsoleMessage = function(msg, lineNum, sourceId) {
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
 	 console.log('CONSOLE: ' + msg + ' (from line #' + lineNum + ' in "' + sourceId + '")');
-};*/
+};
 
 fs.changeWorkingDirectory(system.args[2]);
 
@@ -76,11 +76,12 @@ page.open(system.args[1], function() {
 	page.zoomFactor = 1.0;
 	
 	waitFor(
-		function() {
-			return page.evaluate(function() {
-				return typeof font_store !== "undefined" && typeof font_store[json.name] !== "undefined";
-			});
-		}, 
+		// function() {
+		// 	return page.evaluate(function() {
+		// 		console.log("font_store:", JSON.stringify(font_store), "json:", JSON.stringify(json));
+		// 		return typeof font_store !== "undefined" && typeof font_store[json.name] !== "undefined";
+		// 	});
+		// },
 		function() {
 		    var data = page.evaluate(function() {
 				overlay();

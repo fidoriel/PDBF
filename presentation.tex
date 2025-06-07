@@ -1,17 +1,21 @@
-% latexmk -pdf -shell-escape introduction.tex
+% latexmk -pdf presentation.tex
 % LTeX: language=en-US
 
 \documentclass[aspectratio=169]{beamer}
 \usepackage{diagbox}
 \usepackage{hyperref}
-\usepackage{pdbf}
 \usetheme[background=dark, progressbar=frametitle, titleformat=smallcaps]{metropolis}
 \usepackage{csquotes}
-
+\usepackage{pdbf}
 \usepackage{biblatex}
 \addbibresource{bibliography.bib}
 
-\title{Tools for Reproduction of Results in Computer Science}
+
+\dbSQLText{CREATE TABLE HelloWorld(id int, text varchar); INSERT INTO HelloWorld VALUES(10, 'Hello World!'); INSERT INTO HelloWorld VALUES(120, 'Hallo Welt!');  INSERT INTO HelloWorld VALUES(100, 'bonjour le monde!');  INSERT INTO HelloWorld VALUES(42, 'Hello World!');}
+\dbSQLText{CREATE TABLE test(a int, b int, [attribute with space] int); INSERT INTO test VALUES(1, 1, 1); INSERT INTO test VALUES(2, 2, 4); INSERT INTO test VALUES(3, 3, 8); INSERT INTO test VALUES(4, 4, 16);}
+
+
+\title{Reproducing a Paper about a reproducebility Tool}
 \subtitle{Scientific Practice}
 \date{16.06.2025}
 
@@ -111,12 +115,21 @@ E: Package 'phantomjs' has no installation candidate
 \end{frame}
 
 
-\dbSQLText{CREATE TABLE HelloWorld(id int, text varchar); INSERT INTO HelloWorld VALUES(10, 'Hello World!'); INSERT INTO HelloWorld VALUES(120, 'Hallo Welt!');  INSERT INTO HelloWorld VALUES(100, 'bonjour le monde!');  INSERT INTO HelloWorld VALUES(42, 'Hello World!');}
 
 \begin{frame}{Just some notable features of PDBF}
     They can package interactive graphics and databases. Just change the file ending between \texttt{html} and \texttt{pdf}
 
     \dataTable[color=white]{SELECT * FROM HelloWorld;}
+\end{frame}
+
+
+\begin{frame}{Just some notable features of PDBF}
+    \sql{SELECT * FROM test;}\\[3pt]
+    The table \texttt{test} contains \dataText{SELECT COUNT(*) FROM test;} tuples.\\[3pt]
+
+    The following points are linked to the chart on the left side below: \dataText[linkTo=testname, linkSelector=2, linkLabel=Value at 2]{SELECT * FROM test WHERE a=2;}, \dataText[linkTo=testname, linkSelector=3, linkLabel=Value at 3]{SELECT * FROM test WHERE a=3;}.\\[3pt]
+    \chart[width=0.45\textwidth, height=0.3\textwidth, logscale=true, chartType=line, name=testname]{SELECT a, b, [attribute with space] FROM test;}
+    \chart[width=0.45\textwidth, height=0.3\textwidth, chartType=bar]{SELECT a, b, [attribute with space] FROM test;}\\[1pt]
 \end{frame}
 
 \begin{frame}{Reproducability of this presentation}
