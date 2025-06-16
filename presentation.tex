@@ -31,13 +31,15 @@
 \AtBeginSection[]{}
 
 \begin{document}
-
 {
 \setbeamertemplate{footline}{}
 \frame{\titlepage}
 }
 
 \begin{frame}{Reproduction}
+    Increasing amount of results of released can not be reproduces in computer science.
+    Reproduce and identify errors bugs (e.g. compiler optimization in polynomial operations caused wrong results) or build up on existing work.
+
     If I have the same code, the same environment, the same datasets and hardware I can reproduce the results described in a paper\footnote{Please do not ask me about Machine Learning. GPUs sometimes do non-deterministic stuff.}.
 \end{frame}
 
@@ -51,10 +53,10 @@
 % \end{frame}
 
 \begin{frame}{Lets Reproduce}
-    \citetitle{pdbf} aims to be able to build an all-in-one PDF to reproduce research.
+    \citetitle{pdbf} aims to be able to build an all-in-one PDF to reproduce research easily.
     \begin{itemize}
         \item Actual Paper (\LaTeX)
-        \item Used datasets (json, sql command, csv)
+        \item Package datasets (json, sql command, csv)
         \item Interactive Diagrams
         \item Attach Virtual Machines, tarballs
         \item ...
@@ -63,7 +65,7 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Reproducing the Environment to Compile PDBF}
+\begin{frame}[fragile]{Reproducing the Environment to Compile PDBF \LaTeX}
     \small
     \begin{verbatim}
 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]                  
@@ -85,63 +87,61 @@ E: Package 'phantomjs' has no installation candidate
 \end{frame}
 
 
-\begin{frame}{Let's get \texttt{phantomjs}}
-    \begin{itemize}
-        \item Tried old Debian, where package server still existed $\rightarrow$ version too new
-        \item Building from source failed via \texttt{aur} and direct for newer and older versions
-        \item Found a precompiled binary on GitHub for a compatible version
-        \item Then PDBF codebase had a bug $\rightarrow$ added a missing maven dependency $\rightarrow$ workaround $\rightarrow$ this presentation
-    \end{itemize}
-    
-\end{frame}
+% \begin{frame}{Let's get \texttt{phantomjs}}
+%     \begin{itemize}
+%         \item Tried old Debian, where package server still existed $\rightarrow$ version too new
+%         \item Building from source failed via \texttt{aur} and direct for newer and older versions
+%         \item Found a precompiled binary on GitHub for a compatible version
+%         \item Then PDBF codebase had a bug and added a missing maven dependency $\rightarrow$ workaround $\rightarrow$ this presentation
+%     \end{itemize}
+% \end{frame}
 
 
-\begin{frame}{Dependency problems}
+\begin{frame}{Dependency Problems}
+    Package may be not available for various reasons
     \begin{itemize}
-        \item Package server may go down
-        \item Used releases may be yanked for security reasons and no longer available
-        \item Packages may be updated by repository maintainers e.g. apt
-        \item Packages may not be available for a newer system architecture (e.g. x86\_64 or arm64v8)
-        \item Virtualizing a System may become more difficult
-        \item Files cannot be read because of proprietary file formats
+        \item Deprecated / not maintained
+        \item Server
+        \item Does not compile on newer system
+        \item Yanked for security reasons
     \end{itemize}
 \end{frame}
 
 
-\begin{frame}{How to archive digital work}[allowframebreaks]
+\begin{frame}[allowframebreaks]
+\frametitle{How to archive digital research artifacts}
     \begin{itemize}
         \item Pin all dependency versions using commit-shas or lock-files from tools like cargo, uv, npm, maven, nix ...
-        \item Package not only the code and datasets BUT all of their (compiled) dependencies, compiler versions, drivers, operating systems, kernels ...
-        \item E.g. compiler optimization bugs in polynomial operations caused wrong results
-        \item Non-Hardware reliant projects may be much easier to package
+        \item Package not only the code and datasets BUT all of their (compiled) dependencies, compiler versions, drivers, operating systems, kernels ... (do not rely on any external servers)
         \item Rely on Open Source Industry Standard tools, so that Commercial interest funds these project
         \item Package an OCI Image / Docker Compose setup or Virtual Machine Disk Image
         \item If not possible have exact setup description (maybe special hardware is required e.g. FPGAs) and package as much as possible
-        \item System configs may require deep setup understanding and are hard to reproduce even by the authors
+        % \item System configs may require deep setup understanding and are hard to reproduce even by the authors
         \item Tools like \citetitle{reprozip} can assist identify and package relevant components through syscall tracing
         \item Store artifact in a reliable archive like \url{https://zenodo.org/} or Code with GitHub Arctic Code Vault
-        \item Test the reproducible setup yourself and hand it other people
-        \item Do not rely on any external servers
+        \item Test the reproducible setup yourself and hand it other people with good quick start
+        \item Be careful with randomness and provide seeds
         \item Try to minimize non-packable dependencies like Hypervisors or Container runtimes
     \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Just some notable features of PDBF}
+\begin{frame}{Some notable features of PDBF}
     They can package interactive graphics and databases. Just change the file ending between \texttt{html} and \texttt{pdf}
 
-    When viewing as \texttt{html} click on the Table to play around with sql.
+    When viewing as \texttt{html} click on the red elements to play around with sql.
+    So it is possible to see how data was analyzed.
 
-    \dataTable[color=white]{SELECT * FROM HelloWorld;}
+    \dataTable[color=red]{SELECT * FROM HelloWorld;}
 \end{frame}
 
 
-\begin{frame}{Just some notable features of PDBF}
+\begin{frame}{Some notable features of PDBF}
     I had to apply a workaround to make it build. Sadly the pdf version has slightly broken charts.
-    \sql{SELECT * FROM test;}\\[3pt]
-    The table \texttt{test} contains \dataText{SELECT COUNT(*) FROM test;} tuples.\\[3pt]
+    \sql[color=red]{SELECT * FROM test;}\\[3pt]
+    The table \texttt{test} contains \dataText[color=red]{SELECT COUNT(*) FROM test;} tuples.\\[3pt]
 
-    The following points are linked to the chart on the left side below: \dataText[linkTo=testname, linkSelector=2, linkLabel=Value at 2]{SELECT * FROM test WHERE a=2;}, \dataText[linkTo=testname, linkSelector=3, linkLabel=Value at 3]{SELECT * FROM test WHERE a=3;}.\\[3pt]
+    The following points are linked to the chart on the left side below: \dataText[linkTo=testname, linkSelector=2, linkLabel=Value at 2, color=red]{SELECT * FROM test WHERE a=2;}, \dataText[linkTo=testname, linkSelector=3, linkLabel=Value at 3, color=red]{SELECT * FROM test WHERE a=3;}.\\[3pt]
     \chart[width=0.45\textwidth, height=0.3\textwidth, logscale=true, chartType=line, name=testname]{SELECT a, b, [attribute with space] FROM test;}
     \chart[width=0.45\textwidth, height=0.3\textwidth, chartType=bar]{SELECT a, b, [attribute with space] FROM test;}\\[1pt]
 \end{frame}
@@ -151,8 +151,9 @@ E: Package 'phantomjs' has no installation candidate
     \begin{itemize}
     \item You will receive a PDBF file of this presentation
     \item PDBF could bundle a \texttt{tar} file, but the OCI Image is around 5~GiB and I cannot send this via Slack
-    \item There is a repository, a Dockerfile and a Docker Image \url{https://github.com/fidoriel/pdbf}
+    \item There is a repository with \texttt{README.md}, a Dockerfile and an OCI Image \url{https://github.com/fidoriel/pdbf}
     \item You should be able to use the \texttt{README.md} and \texttt{Docker} to build PDBF and this presentation
+    \item Disclaimer: Do not use PDBF, as it is not maintained anymore, despite my 80\% fix
     \end{itemize}
 \end{frame}
 
@@ -161,9 +162,8 @@ E: Package 'phantomjs' has no installation candidate
     Reproduction is time-consuming for all participants
     \begin{itemize}
     \item Should reproducibility be a requirement in peer reviewed magazines?
-    \item Can we ask reviewers to spend extra time on reproducing results?
     \item Is it reasonable to ask scientists to spend time on reproducibility, so their work can be archived better and may have a stronger stand?
-    \item How to handle research that cannot be published this way, for example Intellectual Property or Privacy rights prohibit publishing of a dataset?
+    \item How to handle research that can not be published this way, for example Intellectual Property or Privacy rights prohibit publishing of a dataset?
     \end{itemize}
 \end{frame}
 
